@@ -1,45 +1,108 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* * {
+  outline: 1px solid #f73;
+} */
+
+.h1-logo {
+  background-image: url(../assets/logo.svg);
+  background-repeat: no-repeat;
+
+  width: 311px;
+  height: 38.5px;
+
+  text-indent: 101%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
+/* Step1: The container */
+.custom-check {
+  position: relative;
+  display: block;
+  padding-left: 32px;
+  user-select: none;
+  flex-grow: 1;
+}
+
+/* Step2: Hide the browser's default checkbox */
+.custom-check input[type="checkbox"] {
+  position: absolute;
+  margin-right: 16px;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+
+/* Step3: Create a custom checkbox */
+.custom-check .checkmark {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #9F9A91;
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+/* Step4: Create the checkmark/indicator (hidden when not checked) */
+.custom-check .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Step5: On mouse-over, add a grey background color */
+.custom-check:hover input~.checkmark {
+  border: none;
+  outline: none;
+  background-color: #FFD370;
+}
+
+/* Step6: When the checkbox is checked, add a background */
+.custom-check input:checked~.checkmark {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+/* Step7: Show the checkmark when checked */
+.custom-check input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Step8: Style the checkmark/indicator */
+.custom-check .checkmark:after {
+  left: 8px;
+  top: 2px;
+
+  width: 6px;
+  height: 12px;
+
+  border: solid #FFD370;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* end of custom-checkbox */
+
+.tab {
+  padding: 16px 32px 16px 30px;
+  width: 100%;
+
   text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #9F9A91;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.tab-checked {
+  color: #333333;
+  border-bottom: 2px solid #333333;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.todo-checked {
+  color: #9F9A91;
+  font-size: 14px;
+  text-decoration-line: line-through;
 }
