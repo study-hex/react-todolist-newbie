@@ -348,11 +348,11 @@ function App() {
       <Wrapper>
         <Container>
           <Navbar>
-            <a href="#">
+            <a href="#" title="TODOLIST">
               <h1 className="h1-logo">TODOLIST</h1>
             </a>
 
-            <button type="button" onClick={handleResetData}>
+            <button type="button" onClick={handleResetData} aria-label="RESET">
               <span className="material-symbols-outlined">restart_alt</span>
             </button>
           </Navbar>
@@ -363,6 +363,9 @@ function App() {
                 type="text"
                 name="content"
                 id="newTodo"
+                tabIndex="1"
+                aria-label="新增待辦事項"
+                placeholder="新增待辦事項"
                 value={newTodo}
                 onChange={(e) => handleAddInputChange(e)}
                 onKeyDown={(e) => {
@@ -373,11 +376,9 @@ function App() {
                     return setNewTodo('');
                   }
                 }}
-                // disabled={isClickTab !== 'ALL'}
               />
 
               <ButtonAddTodo
-                // disabled={isClickTab !== 'ALL'}
                 onClick={handleAddTodo}
                 aria-label="ADD"
               ></ButtonAddTodo>
@@ -389,6 +390,7 @@ function App() {
                   <TabItem>
                     <button
                       type="button"
+                      aria-label="ALL"
                       className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
                       onClick={() => handleTabClick('ALL')}
                     >
@@ -398,6 +400,7 @@ function App() {
                   <TabItem>
                     <button
                       type="button"
+                      aria-label="TODO"
                       className={`tab ${
                         isClickTab === 'TODO' && 'tab-checked'
                       }`}
@@ -409,6 +412,7 @@ function App() {
                   <TabItem>
                     <button
                       type="button"
+                      aria-label="DONE"
                       className={`tab ${
                         isClickTab === 'DONE' && 'tab-checked'
                       }`}
@@ -431,6 +435,7 @@ function App() {
                               <input
                                 type="checkbox"
                                 name="checkbox"
+                                aria-label="STATUS"
                                 value={todo.status}
                                 checked={todo.status}
                                 onChange={() => handleToggleTodo(todo)}
@@ -443,6 +448,7 @@ function App() {
                                 type="text"
                                 name="content"
                                 id="todo"
+                                aria-label="輸入編輯後的事項"
                                 className={`${todo.status && 'todo-checked'} ${
                                   isEditId && 'todo-edited'
                                 }`}
@@ -456,6 +462,7 @@ function App() {
                               />
                             ) : (
                               <ButtonTodoContent
+                                aria-label="EDIT"
                                 onClick={() => setIsEditId(todo.id)}
                                 className={`${todo.status && 'todo-checked'}`}
                               >
@@ -464,6 +471,7 @@ function App() {
                             )}
 
                             <ButtonRemoveTodo
+                              aria-label="REMOVE"
                               onClick={() => handleRemoveTodo(todo)}
                             >
                               <span className="material-symbols-outlined">
@@ -478,11 +486,15 @@ function App() {
               </CardBody>
 
               <CardFooter>
-                <button type="button" onClick={() => handleTabClick('TODO')}>
+                <button
+                  type="button"
+                  aria-label="data's length of have todo"
+                  onClick={() => handleTabClick('TODO')}
+                >
                   <span>{haveTodoLength}</span> 個待完成項目
                 </button>
 
-                <ButtonClearTodo onClick={handleClearTodo}>
+                <ButtonClearTodo aria-label="CLEAR" onClick={handleClearTodo}>
                   清除已完成項目
                 </ButtonClearTodo>
               </CardFooter>
