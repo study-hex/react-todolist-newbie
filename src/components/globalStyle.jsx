@@ -14,7 +14,7 @@ input {
   outline: none;
 }
 
-button, input, label {
+button, label {
   cursor: pointer;
 }
 

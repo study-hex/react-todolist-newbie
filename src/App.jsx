@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ResetStyle, BaseStyle } from './components/globalStyle';
@@ -7,6 +7,7 @@ import './styles/App.css';
 // import styles from './styles/App.css?inline';
 // import styles from './styles/App.css';
 
+import data from './data/data';
 
 /**
  * Default and named imports from CSS files are deprecated. Use the ?inline query instead.
@@ -15,8 +16,10 @@ import './styles/App.css';
  */
 
 const Wrapper = styled.div`
+  height: 100vh;
+  overflow: hidden;
+
   @media (min-width: 1024px) {
-    height: 100vh;
     background: linear-gradient(
       177deg,
       #ffd370 0%,
@@ -84,12 +87,34 @@ const CardHeader = styled.div`
 
 const CardBody = styled.div`
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   padding: 16px;
   margin-top: -2px;
   border-top: 2px solid #efefef;
+
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #333333 $FFD370;
+
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #333333;
+
+    border: 1px solid $FFD370;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+
+    &:hover {
+      box-shadow: inset 0 0 4px $FFD370;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 0.3rem #9f9a91;
+  }
 `;
 
 const CardFooter = styled.div`
@@ -108,6 +133,13 @@ const TabItem = styled.li`
   width: 33%;
 `;
 
+const TodoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+`;
+
 const TodoListItem = styled.li`
   padding-bottom: 16px;
   border-bottom: 1px solid #e5e5e5;
@@ -124,6 +156,7 @@ const ButtonAddTodo = styled.button`
   height: 39px;
   border-radius: 10px;
   background-color: #333333;
+  transition: border 0.3s linear;
 
   &::before,
   &::after {
@@ -142,10 +175,113 @@ const ButtonAddTodo = styled.button`
   &::after {
     transform: rotate(90deg);
   }
+
+  &:hover {
+    border: 2px solid #9f9a91;
+  }
+`;
+
+const ButtonClearTodo = styled.button`
+  color: #9f9a91;
+  transition: transform 0.3s linear;
+
+  &:hover {
+    font-weight: bold;
+    color: #333333;
+    transform: scale(1.02);
+  }
+`;
+
+const ButtonRemoveTodo = styled.button`
+  display: inline-flex;
+  align-items: center;
+  color: #9f9a91;
+  transition: transform 0.5s linear;
+
+  &:hover {
+    font-weight: bold;
+    color: #333333;
+    transform: scale(1.02);
+  }
+`;
+
+const ButtonTodoContent = styled.button`
+  width: 100%;
+  text-align: start;
 `;
 
 function App() {
-  // const [count, setCount] = useState(0);
+  const [todoData, setTodoData] = useState([]);
+  const [isEditId, setIsEditId] = useState(null);
+
+  const [newTodo, setNewTodo] = useState('');
+  const [haveTodoLength, setHaveTodoLength] = useState(0);
+
+  const handleRemoveTodo = (todo) => {
+    setTodoData(
+      todoData.filter((item) => {
+        return item.id !== todo.id;
+      }),
+    );
+  };
+
+  const handleToggleTodo = (todo) => {
+    setTodoData(
+      todoData.filter((item) => {
+        if (item.id === todo.id) {
+          item.status = !todo.status;
+        }
+        return { ...item };
+      }),
+    );
+  };
+
+  const handleEditTodo = (todo, e) => {
+    setTodoData(
+      todoData.map((item) => {
+        if (item.id === todo.id) {
+          return { ...item, content: e.target.value };
+        }
+        return { ...item };
+      }),
+    );
+  };
+
+  const handleAddInputChange = (e) => {
+    setNewTodo(e.target.value.trim());
+  };
+
+  const handleAddTodo = () => {
+    if (!newTodo) {
+      return;
+    }
+
+    const newTodoItem = {
+      id: self.crypto.randomUUID(),
+      content: newTodo,
+      status: false,
+      createTime: new Date(),
+    };
+
+    setTodoData([...todoData, newTodoItem]);
+    setNewTodo('');
+  };
+
+  const handleClearTodo = () => {
+    setTodoData(todoData.filter((item) => !item.status));
+  };
+
+  useEffect(() => {
+    if (data) {
+      setTodoData([...data]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (todoData) {
+      setHaveTodoLength(todoData.filter((item) => !item.status).length);
+    }
+  }, [todoData]);
 
   return (
     <>
@@ -162,9 +298,15 @@ function App() {
 
           <Main>
             <InputContainer>
-              <input type="text" name="content" id="newTodo" className="" />
+              <input
+                type="text"
+                name="content"
+                id="newTodo"
+                value={newTodo}
+                onChange={(e) => handleAddInputChange(e)}
+              />
 
-              <ButtonAddTodo>ADD</ButtonAddTodo>
+              <ButtonAddTodo onClick={handleAddTodo}>ADD</ButtonAddTodo>
             </InputContainer>
 
             <Card>
@@ -189,43 +331,72 @@ function App() {
               </CardHeader>
 
               <CardBody>
-                <ul className="todo-list">
-                  <TodoListItem>
-                    <TodoListItemContainer>
-                      <label className="custom-check cursor-pointer">
-                        <input type="checkbox" name="checkbox" value={true} />
-                        <span className="checkmark"></span>
-                      </label>
+                <TodoList>
+                  {todoData &&
+                    todoData.map((todo) => {
+                      return (
+                        <TodoListItem key={todo.id}>
+                          <TodoListItemContainer>
+                            <label className="custom-check cursor-pointer">
+                              <input
+                                type="checkbox"
+                                name="checkbox"
+                                value={todo.status}
+                                checked={todo.status}
+                                onChange={() => handleToggleTodo(todo)}
+                              />
+                              <span className="checkmark"></span>
+                            </label>
 
-                      <input
-                        type="text"
-                        name="content"
-                        id="todo"
-                        className="todo-input todo-checked"
-                        value={true}
-                      />
+                            {isEditId === todo.id ? (
+                              <input
+                                type="text"
+                                name="content"
+                                id="todo"
+                                className={`${todo.status && 'todo-checked'} ${
+                                  isEditId && 'todo-edited'
+                                }`}
+                                value={todo.content}
+                                onChange={(e) => handleEditTodo(todo, e)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === 'Escape') {
+                                    setIsEditId(null);
+                                  }
+                                }}
+                              />
+                            ) : (
+                              <ButtonTodoContent
+                                onClick={() => setIsEditId(todo.id)}
+                              >
+                                {todo.content}
+                              </ButtonTodoContent>
+                            )}
 
-                      <button type="button">
-                        <span className="material-symbols-outlined">close</span>
-                      </button>
-                    </TodoListItemContainer>
-                  </TodoListItem>
-                </ul>
+                            <ButtonRemoveTodo
+                              onClick={() => handleRemoveTodo(todo)}
+                            >
+                              <span className="material-symbols-outlined">
+                                close
+                              </span>
+                            </ButtonRemoveTodo>
+                          </TodoListItemContainer>
+                        </TodoListItem>
+                      );
+                    })}
+                </TodoList>
               </CardBody>
 
               <CardFooter>
                 <p>
-                  <span>5</span> 個待完成項目
+                  <span>{haveTodoLength}</span> 個待完成項目
                 </p>
 
-                <button type="button">清除已完成項目</button>
+                <ButtonClearTodo onClick={handleClearTodo}>
+                  清除已完成項目
+                </ButtonClearTodo>
               </CardFooter>
             </Card>
             {/* end of card */}
-
-            {/* <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button> */}
           </Main>
         </Container>
       </Wrapper>
