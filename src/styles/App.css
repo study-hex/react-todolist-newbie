@@ -95,6 +95,7 @@
   font-size: 14px;
   font-weight: 700;
   color: #9F9A91;
+  transition: color 0.3s linear;
 }
 
 .tab-checked {

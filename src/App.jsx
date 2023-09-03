@@ -7,7 +7,7 @@ import './styles/App.css';
 // import styles from './styles/App.css?inline';
 // import styles from './styles/App.css';
 
-import data from './data/data';
+import initData from './data/data';
 
 /**
  * Default and named imports from CSS files are deprecated. Use the ?inline query instead.
@@ -179,6 +179,10 @@ const ButtonAddTodo = styled.button`
   &:hover {
     border: 2px solid #9f9a91;
   }
+
+  &:disabled {
+    background-color: #9f9a91;
+  }
 `;
 
 const ButtonClearTodo = styled.button`
@@ -212,7 +216,10 @@ const ButtonTodoContent = styled.button`
 
 function App() {
   const [todoData, setTodoData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+
   const [isEditId, setIsEditId] = useState(null);
+  const [isClickTab, setIsClickTab] = useState('ALL');
 
   const [newTodo, setNewTodo] = useState('');
   const [haveTodoLength, setHaveTodoLength] = useState(0);
@@ -270,18 +277,36 @@ function App() {
   const handleClearTodo = () => {
     setTodoData(todoData.filter((item) => !item.status));
   };
+  // end of CRUD
+
+  const handleTabClick = (type) => {
+    setIsClickTab(type);
+  };
 
   useEffect(() => {
-    if (data) {
-      setTodoData([...data]);
+    if (initData) {
+      setTodoData([...initData]);
+      setFilterData([...initData]);
     }
   }, []);
 
   useEffect(() => {
-    if (todoData) {
-      setHaveTodoLength(todoData.filter((item) => !item.status).length);
-    }
-  }, [todoData]);
+    setFilterData(
+      todoData.filter((item) => {
+        if (isClickTab === 'ALL') {
+          return true;
+        }
+        if (isClickTab === 'TODO') {
+          return !item.status;
+        }
+        if (isClickTab === 'DONE') {
+          return item.status;
+        }
+      }),
+    );
+
+    setHaveTodoLength(todoData.filter((item) => !item.status).length);
+  }, [todoData, isClickTab]);
 
   return (
     <>
@@ -304,26 +329,47 @@ function App() {
                 id="newTodo"
                 value={newTodo}
                 onChange={(e) => handleAddInputChange(e)}
+                // disabled={isClickTab !== 'ALL'}
               />
 
-              <ButtonAddTodo onClick={handleAddTodo}>ADD</ButtonAddTodo>
+              <ButtonAddTodo
+                // disabled={isClickTab !== 'ALL'}
+                onClick={handleAddTodo}
+                aria-label="ADD"
+              ></ButtonAddTodo>
             </InputContainer>
 
             <Card>
               <CardHeader>
                 <TabList>
                   <TabItem>
-                    <button type="button" className="tab tab-checked">
+                    <button
+                      type="button"
+                      className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
+                      onClick={() => handleTabClick('ALL')}
+                    >
                       全部
                     </button>
                   </TabItem>
                   <TabItem>
-                    <button type="button" className="tab">
+                    <button
+                      type="button"
+                      className={`tab ${
+                        isClickTab === 'TODO' && 'tab-checked'
+                      }`}
+                      onClick={() => handleTabClick('TODO')}
+                    >
                       待完成
                     </button>
                   </TabItem>
                   <TabItem>
-                    <button type="button" className="tab">
+                    <button
+                      type="button"
+                      className={`tab ${
+                        isClickTab === 'DONE' && 'tab-checked'
+                      }`}
+                      onClick={() => handleTabClick('DONE')}
+                    >
                       已完成
                     </button>
                   </TabItem>
@@ -333,7 +379,7 @@ function App() {
               <CardBody>
                 <TodoList>
                   {todoData &&
-                    todoData.map((todo) => {
+                    filterData.map((todo) => {
                       return (
                         <TodoListItem key={todo.id}>
                           <TodoListItemContainer>
@@ -367,6 +413,7 @@ function App() {
                             ) : (
                               <ButtonTodoContent
                                 onClick={() => setIsEditId(todo.id)}
+                                className={`${todo.status && 'todo-checked'}`}
                               >
                                 {todo.content}
                               </ButtonTodoContent>
