@@ -40,6 +40,16 @@
 
 - [x] 待辦為零筆資料時，需顯示文字「目前尚無待辦事項」
 
+---
+
+## Screenshot
+
+> ![PC]('./src/assets/Screenshot-PC.png)
+>
+> ![MOBILE]('./src/assets/Screenshot-mobile.png)
+
+---
+
 ## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
