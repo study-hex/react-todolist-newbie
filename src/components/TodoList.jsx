@@ -9,6 +9,10 @@ const TodoListContainer = styled.ul`
   flex-direction: column;
   gap: 16px;
   list-style: none;
+
+  & input[type='text'] {
+    width: 100%;
+  }
 `;
 
 const TodoListItem = styled.li`
