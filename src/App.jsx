@@ -224,34 +224,46 @@ function App() {
   const [newTodo, setNewTodo] = useState('');
   const [haveTodoLength, setHaveTodoLength] = useState(0);
 
+  const getStoredData = () => {
+    const storedData = localStorage.getItem('todoData');
+    return storedData ? JSON.parse(storedData) : [];
+  };
+
+  const updateStoredData = (data) => {
+    localStorage.setItem('todoData', JSON.stringify(data));
+  };
+
   const handleRemoveTodo = (todo) => {
-    setTodoData(
-      todoData.filter((item) => {
-        return item.id !== todo.id;
-      }),
-    );
+    const newData = todoData.filter((item) => {
+      return item.id !== todo.id;
+    });
+
+    setTodoData(newData);
+    updateStoredData(newData);
   };
 
   const handleToggleTodo = (todo) => {
-    setTodoData(
-      todoData.filter((item) => {
-        if (item.id === todo.id) {
-          item.status = !todo.status;
-        }
-        return { ...item };
-      }),
-    );
+    const newData = todoData.filter((item) => {
+      if (item.id === todo.id) {
+        item.status = !todo.status;
+      }
+      return { ...item };
+    });
+
+    setTodoData(newData);
+    updateStoredData(newData);
   };
 
   const handleEditTodo = (todo, e) => {
-    setTodoData(
-      todoData.map((item) => {
-        if (item.id === todo.id) {
-          return { ...item, content: e.target.value };
-        }
-        return { ...item };
-      }),
-    );
+    const newData = todoData.map((item) => {
+      if (item.id === todo.id) {
+        return { ...item, content: e.target.value };
+      }
+      return { ...item };
+    });
+
+    setTodoData(newData);
+    updateStoredData(newData);
   };
 
   const handleAddInputChange = (e) => {
@@ -263,19 +275,27 @@ function App() {
       return;
     }
 
-    const newTodoItem = {
-      id: self.crypto.randomUUID(),
-      content: newTodo,
-      status: false,
-      createTime: new Date(),
-    };
+    const newData = [
+      ...todoData,
+      {
+        id: self.crypto.randomUUID(),
+        content: newTodo,
+        status: false,
+        createTime: new Date(),
+      },
+    ];
 
-    setTodoData([...todoData, newTodoItem]);
+    setTodoData(newData);
+    updateStoredData(newData);
+
     setNewTodo('');
   };
 
   const handleClearTodo = () => {
-    setTodoData(todoData.filter((item) => !item.status));
+    const newData = todoData.filter((item) => !item.status);
+
+    setTodoData(newData);
+    updateStoredData(newData);
   };
   // end of CRUD
 
@@ -284,10 +304,12 @@ function App() {
   };
 
   useEffect(() => {
-    if (initData) {
-      setTodoData([...initData]);
-      setFilterData([...initData]);
+    if (!getStoredData().length) {
+      updateStoredData([...initData]);
     }
+
+    setTodoData([...getStoredData()]);
+    setFilterData([...getStoredData()]);
   }, []);
 
   useEffect(() => {
