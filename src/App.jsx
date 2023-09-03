@@ -1,13 +1,17 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+import initData from './data/data';
+
+import TodoAddInput from './components/TodoAddInput';
+import TodoListCard from './components/TodoListCard';
 
 import { ResetStyle, BaseStyle } from './components/globalStyle';
 
 import './styles/App.css';
 // import styles from './styles/App.css?inline';
 // import styles from './styles/App.css';
-
-import initData from './data/data';
 
 /**
  * Default and named imports from CSS files are deprecated. Use the ?inline query instead.
@@ -62,283 +66,41 @@ const Main = styled.main`
   }
 `;
 
-const InputContainer = styled.div`
-  display: inline-flex;
-  padding: 4px 4px 4px 16px;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
-`;
-
-const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 170px);
-
-  border-radius: 10px;
-  background-color: #ffffff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
-`;
-
-const CardHeader = styled.div`
-  z-index: 2;
-`;
-
-const CardBody = styled.div`
-  flex-grow: 1;
-  padding: 16px;
-  margin-top: -2px;
-  border-top: 2px solid #efefef;
-
-  overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: #333333 $FFD370;
-
-  &::-webkit-scrollbar {
-    width: 0.3rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #333333;
-
-    border: 1px solid $FFD370;
-    border-radius: 12px;
-    -moz-border-radius: 12px;
-    -webkit-border-radius: 12px;
-
-    &:hover {
-      box-shadow: inset 0 0 4px $FFD370;
-    }
-  }
-
-  &::-webkit-scrollbar-track {
-    // box-shadow: inset 0 0 0.3rem #9f9a91;
-  }
-`;
-
-const CardFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-`;
-
-const TabList = styled.ul`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const TabItem = styled.li`
-  width: 33%;
-`;
-
-const TodoList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  list-style: none;
-`;
-
-const TodoListItem = styled.li`
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e5e5e5;
-`;
-
-const TodoListItemContainer = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const ButtonAddTodo = styled.button`
-  position: relative;
-  width: 40px;
-  height: 39px;
-  border-radius: 10px;
-  background-color: #333333;
-  transition: border 0.1s linear;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 12%;
-
-    height: 60%;
-    top: 20%;
-    left: 45%;
-
-    background-color: #ffffff;
-    border-radius: 10px;
-  }
-
-  &::after {
-    transform: rotate(90deg);
-  }
-
-  &:hover {
-    border: 2px solid #9f9a91;
-  }
-
-  &:disabled {
-    background-color: #9f9a91;
-  }
-`;
-
-const ButtonClearTodo = styled.button`
-  color: #9f9a91;
-  transition: transform 0.3s linear;
-
-  &:hover {
-    font-weight: bold;
-    color: #333333;
-    transform: scale(1.02);
-  }
-`;
-
-const ButtonRemoveTodo = styled.button`
-  display: inline-flex;
-  align-items: center;
-  color: #9f9a91;
-  transition: transform 0.5s linear;
-
-  &:hover {
-    font-weight: bold;
-    color: #333333;
-    transform: scale(1.02);
-  }
-`;
-
-const ButtonTodoContent = styled.button`
-  width: 100%;
-  text-align: start;
-`;
+// end of styled
 
 function App() {
   const [todoData, setTodoData] = useState([]);
-  const [filterData, setFilterData] = useState([]);
-
-  const [isEditId, setIsEditId] = useState(null);
-  const [isClickTab, setIsClickTab] = useState('ALL');
-
-  const [newTodo, setNewTodo] = useState('');
-  const [haveTodoLength, setHaveTodoLength] = useState(0);
 
   const getStoredData = () => {
     const storedData = localStorage.getItem('todoData');
     return storedData ? JSON.parse(storedData) : [];
   };
 
-  const updateStoredData = (data) => {
+  const saveStoredData = (data) => {
     localStorage.setItem('todoData', JSON.stringify(data));
   };
 
-  const handleRemoveTodo = (todo) => {
-    const newData = todoData.filter((item) => {
-      return item.id !== todo.id;
-    });
+  // end of localStorage
 
+  const updateData = (newData) => {
     setTodoData(newData);
-    updateStoredData(newData);
-  };
-
-  const handleToggleTodo = (todo) => {
-    const newData = todoData.filter((item) => {
-      if (item.id === todo.id) {
-        item.status = !todo.status;
-      }
-      return { ...item };
-    });
-
-    setTodoData(newData);
-    updateStoredData(newData);
-  };
-
-  const handleEditTodo = (todo, e) => {
-    const newData = todoData.map((item) => {
-      if (item.id === todo.id) {
-        return { ...item, content: e.target.value };
-      }
-      return { ...item };
-    });
-
-    setTodoData(newData);
-    updateStoredData(newData);
-  };
-
-  const handleAddInputChange = (e) => {
-    setNewTodo(e.target.value.trim());
-  };
-
-  const handleAddTodo = () => {
-    if (!newTodo) {
-      return;
-    }
-
-    const newData = [
-      ...todoData,
-      {
-        id: self.crypto.randomUUID(),
-        content: newTodo,
-        status: false,
-        createTime: new Date(),
-      },
-    ];
-
-    setTodoData(newData);
-    updateStoredData(newData);
-
-    setNewTodo('');
-  };
-
-  const handleClearTodo = () => {
-    const newData = todoData.filter((item) => !item.status);
-
-    setTodoData(newData);
-    updateStoredData(newData);
-  };
-  // end of CRUD
-
-  const handleTabClick = (type) => {
-    setIsClickTab(type);
+    saveStoredData(newData);
   };
 
   const handleResetData = () => {
     localStorage.removeItem('todoData');
 
     setTodoData([...initData]);
-    setFilterData([...initData]);
   };
 
   useEffect(() => {
     if (!getStoredData().length) {
-      updateStoredData([...initData]);
+      saveStoredData([...initData]);
     }
 
     setTodoData([...getStoredData()]);
-    setFilterData([...getStoredData()]);
   }, []);
-
-  useEffect(() => {
-    setFilterData(
-      todoData.filter((item) => {
-        if (isClickTab === 'ALL') {
-          return true;
-        }
-        if (isClickTab === 'TODO') {
-          return !item.status;
-        }
-        if (isClickTab === 'DONE') {
-          return item.status;
-        }
-      }),
-    );
-
-    setHaveTodoLength(todoData.filter((item) => !item.status).length);
-  }, [todoData, isClickTab]);
+  // end of useEffect
 
   return (
     <>
@@ -358,148 +120,9 @@ function App() {
           </Navbar>
 
           <Main>
-            <InputContainer>
-              <input
-                type="text"
-                name="content"
-                id="newTodo"
-                tabIndex="1"
-                aria-label="新增待辦事項"
-                placeholder="新增待辦事項"
-                value={newTodo}
-                onChange={(e) => handleAddInputChange(e)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    return handleAddTodo();
-                  }
-                  if (e.key === 'Escape') {
-                    return setNewTodo('');
-                  }
-                }}
-              />
+            <TodoAddInput todoData={todoData} updateData={updateData} />
 
-              <ButtonAddTodo
-                onClick={handleAddTodo}
-                aria-label="ADD"
-              ></ButtonAddTodo>
-            </InputContainer>
-
-            <Card>
-              <CardHeader>
-                <TabList>
-                  <TabItem>
-                    <button
-                      type="button"
-                      aria-label="ALL"
-                      className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
-                      onClick={() => handleTabClick('ALL')}
-                    >
-                      全部
-                    </button>
-                  </TabItem>
-                  <TabItem>
-                    <button
-                      type="button"
-                      aria-label="TODO"
-                      className={`tab ${
-                        isClickTab === 'TODO' && 'tab-checked'
-                      }`}
-                      onClick={() => handleTabClick('TODO')}
-                    >
-                      待完成
-                    </button>
-                  </TabItem>
-                  <TabItem>
-                    <button
-                      type="button"
-                      aria-label="DONE"
-                      className={`tab ${
-                        isClickTab === 'DONE' && 'tab-checked'
-                      }`}
-                      onClick={() => handleTabClick('DONE')}
-                    >
-                      已完成
-                    </button>
-                  </TabItem>
-                </TabList>
-              </CardHeader>
-
-              <CardBody>
-                <TodoList>
-                  {todoData &&
-                    filterData.map((todo) => {
-                      return (
-                        <TodoListItem key={todo.id}>
-                          <TodoListItemContainer>
-                            <label className="custom-check cursor-pointer">
-                              <input
-                                type="checkbox"
-                                name="checkbox"
-                                aria-label="STATUS"
-                                value={todo.status}
-                                checked={todo.status}
-                                onChange={() => handleToggleTodo(todo)}
-                              />
-                              <span className="checkmark"></span>
-                            </label>
-
-                            {isEditId === todo.id ? (
-                              <input
-                                type="text"
-                                name="content"
-                                id="todo"
-                                aria-label="輸入編輯後的事項"
-                                className={`${todo.status && 'todo-checked'} ${
-                                  isEditId && 'todo-edited'
-                                }`}
-                                value={todo.content}
-                                onChange={(e) => handleEditTodo(todo, e)}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === 'Escape') {
-                                    setIsEditId(null);
-                                  }
-                                }}
-                              />
-                            ) : (
-                              <ButtonTodoContent
-                                aria-label="EDIT"
-                                onClick={() => setIsEditId(todo.id)}
-                                className={`${todo.status && 'todo-checked'}`}
-                              >
-                                {todo.content}
-                              </ButtonTodoContent>
-                            )}
-
-                            <ButtonRemoveTodo
-                              aria-label="REMOVE"
-                              onClick={() => handleRemoveTodo(todo)}
-                            >
-                              <span className="material-symbols-outlined">
-                                close
-                              </span>
-                            </ButtonRemoveTodo>
-                          </TodoListItemContainer>
-                        </TodoListItem>
-                      );
-                    })}
-                </TodoList>
-              </CardBody>
-
-              <CardFooter>
-                <button
-                  type="button"
-                  aria-label="data's length of have todo"
-                  onClick={() => handleTabClick('TODO')}
-                >
-                  <span>{haveTodoLength}</span> 個待完成項目
-                </button>
-
-                <ButtonClearTodo aria-label="CLEAR" onClick={handleClearTodo}>
-                  清除已完成項目
-                </ButtonClearTodo>
-              </CardFooter>
-            </Card>
-            {/* end of card */}
+            <TodoListCard todoData={todoData} updateData={updateData} />
           </Main>
         </Container>
       </Wrapper>
