@@ -44,9 +44,9 @@
 
 ## Screenshot
 
-> ![PC]('./src/assets/Screenshot-PC.png')
+> ![PC]("/src/assets/Screenshot-PC.png")
 >
-> ![MOBILE]('./src/assets/Screenshot-mobile.png')
+> ![MOBILE]("/src/assets/Screenshot-mobile.png")
 
 ---
 
