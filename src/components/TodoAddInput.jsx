@@ -12,6 +12,10 @@ const InputContainer = styled.div`
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
+
+  > input {
+    width: 90%;
+  }
 `;
 
 const ButtonAddTodo = styled.button`

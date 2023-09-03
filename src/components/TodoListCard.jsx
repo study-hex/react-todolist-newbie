@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import TodoList from './TodoList';
+import picEmpty from '../assets/empty.webp';
 
 const Card = styled.div`
   display: flex;
@@ -77,6 +78,16 @@ const ButtonClearTodo = styled.button`
   }
 `;
 
+const EmptyGroup = styled.hgroup`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 60px;
+  gap: 16px;
+  color: #333333;
+`;
+
 // end of styled
 
 function TodoListCard(props) {
@@ -117,6 +128,18 @@ function TodoListCard(props) {
     setHaveTodoLength(todoData.filter((item) => !item.status).length);
   }, [todoData, isClickTab, setFilterData]);
   // end of useEffect
+
+  if (!todoData.length) {
+    return (
+      <>
+        <EmptyGroup>
+          <h2>目前尚無待辦事項 (≥o≤)</h2>
+          <img loading="lazy" src={picEmpty} alt="empty" />
+        </EmptyGroup>
+      </>
+    );
+  }
+  // end of (!todoData.length)
 
   return (
     <>

@@ -9,9 +9,23 @@ html, body {
 }
 
 input {
-  width: 90%;
   border: none;
   outline: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  object-fit: cover;
+}
+
+img, a {
+  transition: opacity .3s linear;
+
+  &:hover {
+    opacity: .9;
+  }
 }
 
 button, label {
