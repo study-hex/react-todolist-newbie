@@ -43,6 +43,9 @@ const Container = styled.div`
 `;
 
 const Navbar = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 16px;
   padding-bottom: 16px;
 `;
@@ -156,7 +159,7 @@ const ButtonAddTodo = styled.button`
   height: 39px;
   border-radius: 10px;
   background-color: #333333;
-  transition: border 0.3s linear;
+  transition: border 0.1s linear;
 
   &::before,
   &::after {
@@ -303,6 +306,13 @@ function App() {
     setIsClickTab(type);
   };
 
+  const handleResetData = () => {
+    localStorage.removeItem('todoData');
+
+    setTodoData([...initData]);
+    setFilterData([...initData]);
+  };
+
   useEffect(() => {
     if (!getStoredData().length) {
       updateStoredData([...initData]);
@@ -341,6 +351,10 @@ function App() {
             <a href="#">
               <h1 className="h1-logo">TODOLIST</h1>
             </a>
+
+            <button type="button" onClick={handleResetData}>
+              <span className="material-symbols-outlined">restart_alt</span>
+            </button>
           </Navbar>
 
           <Main>
@@ -351,6 +365,14 @@ function App() {
                 id="newTodo"
                 value={newTodo}
                 onChange={(e) => handleAddInputChange(e)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    return handleAddTodo();
+                  }
+                  if (e.key === 'Escape') {
+                    return setNewTodo('');
+                  }
+                }}
                 // disabled={isClickTab !== 'ALL'}
               />
 
@@ -456,9 +478,9 @@ function App() {
               </CardBody>
 
               <CardFooter>
-                <p>
+                <button type="button" onClick={() => handleTabClick('TODO')}>
                   <span>{haveTodoLength}</span> 個待完成項目
-                </p>
+                </button>
 
                 <ButtonClearTodo onClick={handleClearTodo}>
                   清除已完成項目
