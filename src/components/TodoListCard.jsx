@@ -1,6 +1,8 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+import { todoItemShape } from '../data/propTypes';
 
 import TodoList from './TodoList';
 import picEmpty from '../assets/empty.webp';
@@ -205,5 +207,10 @@ function TodoListCard(props) {
   );
 }
 // end of TodoListCard
+
+TodoListCard.propTypes = {
+  todoData: PropTypes.arrayOf(todoItemShape),
+  updateData: PropTypes.func.isRequired,
+};
 
 export default TodoListCard;

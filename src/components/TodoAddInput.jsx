@@ -1,6 +1,8 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+import { todoItemShape } from '../data/propTypes';
 
 const InputContainer = styled.div`
   display: inline-flex;
@@ -76,7 +78,7 @@ function TodoAddInput(props) {
         id: self.crypto.randomUUID(),
         content: newTodo,
         status: false,
-        createTime: new Date(),
+        createTime: new Date().getTime(),
       },
     ];
 
@@ -113,5 +115,10 @@ function TodoAddInput(props) {
   );
 }
 // end of TodoAddInput
+
+TodoAddInput.propTypes = {
+  todoData: PropTypes.arrayOf(todoItemShape),
+  updateData: PropTypes.func.isRequired,
+};
 
 export default TodoAddInput;
