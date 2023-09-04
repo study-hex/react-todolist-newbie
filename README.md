@@ -12,9 +12,9 @@
 
 ## NOTES
 
-- 練習 styled-components、prop-types
+- 練習 `styled-components`、`prop-types`
 
-- 按鈕用 CSS 畫出十字符號、打勾用 CSS 客製化
+- 按鈕用 CSS 畫出十字符號、打勾方框
 
 - 頁面高度 `100vh`、直向捲軸移至卡片內
 
@@ -27,6 +27,8 @@
 ---
 
 ### RE
+
+- [x] 計算若沒有已完成事項可清除，會 `disabled` 按鈕
 
 - [x] 新增待辦後，可以將頁籤切換為「全部」，可以讓使用者更便捷地確認待辦新增成功
 
