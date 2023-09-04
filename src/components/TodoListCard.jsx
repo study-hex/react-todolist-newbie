@@ -93,17 +93,10 @@ const EmptyGroup = styled.hgroup`
 // end of styled
 
 function TodoListCard(props) {
-  const { todoData, updateData } = props;
+  const { todoData, updateData, isClickTab, handleTabClick } = props;
 
   const [filterData, setFilterData] = useState([]);
   const [haveTodoLength, setHaveTodoLength] = useState(0);
-
-  const [isClickTab, setIsClickTab] = useState('ALL');
-
-  const handleTabClick = (type) => {
-    setIsClickTab(type);
-  };
-  // end of handleTabClick
 
   const handleClearTodo = () => {
     const newData = todoData.filter((item) => !item.status);
@@ -211,6 +204,8 @@ function TodoListCard(props) {
 TodoListCard.propTypes = {
   todoData: PropTypes.arrayOf(todoItemShape),
   updateData: PropTypes.func.isRequired,
+  isClickTab: PropTypes.string.isRequired,
+  handleTabClick: PropTypes.func.isRequired,
 };
 
 export default TodoListCard;

@@ -58,7 +58,7 @@ const ButtonAddTodo = styled.button`
 // end of styled
 
 function TodoAddInput(props) {
-  const { todoData, updateData } = props;
+  const { todoData, updateData, handleTabClick } = props;
 
   const [newTodo, setNewTodo] = useState('');
 
@@ -84,6 +84,7 @@ function TodoAddInput(props) {
 
     updateData(newData);
     setNewTodo('');
+    handleTabClick('ALL');
   };
   // end of handleAddTodo
 
@@ -119,6 +120,7 @@ function TodoAddInput(props) {
 TodoAddInput.propTypes = {
   todoData: PropTypes.arrayOf(todoItemShape),
   updateData: PropTypes.func.isRequired,
+  handleTabClick: PropTypes.func.isRequired,
 };
 
 export default TodoAddInput;

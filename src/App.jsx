@@ -69,6 +69,7 @@ const Main = styled.main`
 
 function App() {
   const [todoData, setTodoData] = useState([]);
+  const [isClickTab, setIsClickTab] = useState('ALL');
 
   const getStoredData = () => {
     const storedData = localStorage.getItem('todoData');
@@ -91,6 +92,11 @@ function App() {
 
     setTodoData([...initData]);
   };
+
+  const handleTabClick = (type) => {
+    setIsClickTab(type);
+  };
+  // end of handleTabClick
 
   useEffect(() => {
     if (!getStoredData().length) {
@@ -119,14 +125,24 @@ function App() {
           </Navbar>
 
           <Main>
-            <TodoAddInput todoData={todoData} updateData={updateData} />
+            <TodoAddInput
+              todoData={todoData}
+              updateData={updateData}
+              handleTabClick={handleTabClick}
+            />
 
-            <TodoListCard todoData={todoData} updateData={updateData} />
+            <TodoListCard
+              todoData={todoData}
+              updateData={updateData}
+              isClickTab={isClickTab}
+              handleTabClick={handleTabClick}
+            />
           </Main>
         </Container>
       </Wrapper>
     </>
   );
 }
+// end of App()
 
 export default App;
