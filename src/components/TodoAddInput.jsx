@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { todoItemShape } from '../data/propTypes';
+import { commonPropTypes } from '../data/propTypes';
 
 const InputContainer = styled.div`
   display: inline-flex;
@@ -58,7 +58,7 @@ const ButtonAddTodo = styled.button`
 // end of styled
 
 function TodoAddInput(props) {
-  const { todoData, updateData } = props;
+  const { todoData, updateData, handleTabClick } = props;
 
   const [newTodo, setNewTodo] = useState('');
 
@@ -84,6 +84,7 @@ function TodoAddInput(props) {
 
     updateData(newData);
     setNewTodo('');
+    handleTabClick('ALL');
   };
   // end of handleAddTodo
 
@@ -117,8 +118,8 @@ function TodoAddInput(props) {
 // end of TodoAddInput
 
 TodoAddInput.propTypes = {
-  todoData: PropTypes.arrayOf(todoItemShape),
-  updateData: PropTypes.func.isRequired,
+  ...commonPropTypes,
+  handleTabClick: PropTypes.func.isRequired,
 };
 
 export default TodoAddInput;

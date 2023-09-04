@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { todoItemShape } from '../data/propTypes';
+import { commonPropTypes } from '../data/propTypes';
 
 import TodoList from './TodoList';
 import picEmpty from '../assets/empty.webp';
@@ -93,17 +93,10 @@ const EmptyGroup = styled.hgroup`
 // end of styled
 
 function TodoListCard(props) {
-  const { todoData, updateData } = props;
+  const { todoData, updateData, isClickTab, handleTabClick } = props;
 
   const [filterData, setFilterData] = useState([]);
   const [haveTodoLength, setHaveTodoLength] = useState(0);
-
-  const [isClickTab, setIsClickTab] = useState('ALL');
-
-  const handleTabClick = (type) => {
-    setIsClickTab(type);
-  };
-  // end of handleTabClick
 
   const handleClearTodo = () => {
     const newData = todoData.filter((item) => !item.status);
@@ -209,8 +202,9 @@ function TodoListCard(props) {
 // end of TodoListCard
 
 TodoListCard.propTypes = {
-  todoData: PropTypes.arrayOf(todoItemShape),
-  updateData: PropTypes.func.isRequired,
+  ...commonPropTypes,
+  isClickTab: PropTypes.string.isRequired,
+  handleTabClick: PropTypes.func.isRequired,
 };
 
 export default TodoListCard;

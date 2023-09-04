@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { todoItemShape } from '../data/propTypes';
+import { commonPropTypes } from '../data/propTypes';
 
 const TodoListContainer = styled.ul`
   display: flex;
@@ -147,9 +147,8 @@ function TodoList(props) {
 // end of TodoList
 
 TodoList.propTypes = {
-  todoData: PropTypes.arrayOf(todoItemShape),
+  ...commonPropTypes,
   filterData: PropTypes.array.isRequired,
-  updateData: PropTypes.func.isRequired,
 };
 
 export default TodoList;
