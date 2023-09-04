@@ -13,6 +13,11 @@ const TodoListContainer = styled.ul`
   & input[type='text'] {
     width: 100%;
   }
+
+  > h3 {
+    padding: 24px;
+    text-align: center;
+  }
 `;
 
 const TodoListItem = styled.li`
@@ -88,6 +93,14 @@ function TodoList(props) {
     updateData(newData);
   };
   // end of handleEditTodo
+
+  if (!filterData.length) {
+    return (
+      <TodoListContainer>
+        <h3>目前沒有資料 \(^Д^)/</h3>
+      </TodoListContainer>
+    );
+  }
 
   return (
     <>

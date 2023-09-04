@@ -17,6 +17,8 @@ const InputContainer = styled.div`
 
   > input {
     width: 90%;
+    font-weight: bold;
+    color: #333333;
   }
 `;
 
