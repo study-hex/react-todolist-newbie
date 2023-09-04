@@ -25,6 +25,13 @@ const TodoListItemContainer = styled.div`
   gap: 16px;
 `;
 
+const TodoListItemText = styled.div`
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
 const ButtonRemoveTodo = styled.button`
   display: inline-flex;
   align-items: center;
@@ -39,7 +46,6 @@ const ButtonRemoveTodo = styled.button`
 `;
 
 const ButtonTodoContent = styled.button`
-  width: 100%;
   text-align: start;
 `;
 
@@ -103,32 +109,34 @@ function TodoList(props) {
                     <span className="checkmark"></span>
                   </label>
 
-                  {isEditId === todo.id ? (
-                    <input
-                      type="text"
-                      name="content"
-                      id="todo"
-                      aria-label="輸入編輯後的事項"
-                      className={`${todo.status && 'todo-checked'} ${
-                        isEditId && 'todo-edited'
-                      }`}
-                      value={todo.content}
-                      onChange={(e) => handleEditTodo(todo, e)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === 'Escape') {
-                          setIsEditId(null);
-                        }
-                      }}
-                    />
-                  ) : (
-                    <ButtonTodoContent
-                      aria-label="EDIT"
-                      onClick={() => setIsEditId(todo.id)}
-                      className={`${todo.status && 'todo-checked'}`}
-                    >
-                      {todo.content}
-                    </ButtonTodoContent>
-                  )}
+                  <TodoListItemText>
+                    {isEditId === todo.id ? (
+                      <input
+                        type="text"
+                        name="content"
+                        id="todo"
+                        aria-label="輸入編輯後的事項"
+                        className={`${todo.status && 'todo-checked'} ${
+                          isEditId && 'todo-edited'
+                        }`}
+                        value={todo.content}
+                        onChange={(e) => handleEditTodo(todo, e)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === 'Escape') {
+                            setIsEditId(null);
+                          }
+                        }}
+                      />
+                    ) : (
+                      <ButtonTodoContent
+                        aria-label="EDIT"
+                        onClick={() => setIsEditId(todo.id)}
+                        className={`${todo.status && 'todo-checked'}`}
+                      >
+                        {todo.content}
+                      </ButtonTodoContent>
+                    )}
+                  </TodoListItemText>
 
                   <ButtonRemoveTodo
                     aria-label="REMOVE"
