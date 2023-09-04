@@ -73,6 +73,12 @@ const ButtonClearTodo = styled.button`
   color: #9f9a91;
   transition: transform 0.3s linear;
 
+  &:disabled {
+    color: #9f9a91;
+    transform: none;
+    cursor: not-allowed;
+  }
+
   &:hover {
     font-weight: bold;
     color: #333333;
@@ -97,30 +103,35 @@ function TodoListCard(props) {
 
   const [filterData, setFilterData] = useState([]);
   const [haveTodoLength, setHaveTodoLength] = useState(0);
+  const [haveClearLength, setHaveClearLength] = useState(0);
 
   const handleClearTodo = () => {
     const newData = todoData.filter((item) => !item.status);
 
+    handleTabClick('DONE');
     updateData(newData);
   };
   // end of handleClearTodo
 
   useEffect(() => {
     setFilterData(
-      todoData.filter((item) => {
-        if (isClickTab === 'ALL') {
-          return true;
-        }
-        if (isClickTab === 'TODO') {
-          return !item.status;
-        }
-        if (isClickTab === 'DONE') {
-          return item.status;
-        }
-      }),
+      [...todoData]
+        .filter((item) => {
+          if (isClickTab === 'ALL') {
+            return true;
+          }
+          if (isClickTab === 'TODO') {
+            return !item.status;
+          }
+          if (isClickTab === 'DONE') {
+            return item.status;
+          }
+        })
+        .reverse(),
     );
 
     setHaveTodoLength(todoData.filter((item) => !item.status).length);
+    setHaveClearLength(todoData.filter((item) => item.status).length);
   }, [todoData, isClickTab, setFilterData]);
   // end of useEffect
 
@@ -142,34 +153,40 @@ function TodoListCard(props) {
         <CardHeader>
           <TabList>
             <TabItem>
-              <button
-                type="button"
-                aria-label="ALL"
-                className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
-                onClick={() => handleTabClick('ALL')}
-              >
-                全部
-              </button>
+              <h2>
+                <button
+                  type="button"
+                  aria-label="ALL"
+                  className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
+                  onClick={() => handleTabClick('ALL')}
+                >
+                  全部
+                </button>
+              </h2>
             </TabItem>
             <TabItem>
-              <button
-                type="button"
-                aria-label="TODO"
-                className={`tab ${isClickTab === 'TODO' && 'tab-checked'}`}
-                onClick={() => handleTabClick('TODO')}
-              >
-                待完成
-              </button>
+              <h2>
+                <button
+                  type="button"
+                  aria-label="TODO"
+                  className={`tab ${isClickTab === 'TODO' && 'tab-checked'}`}
+                  onClick={() => handleTabClick('TODO')}
+                >
+                  待完成
+                </button>
+              </h2>
             </TabItem>
             <TabItem>
-              <button
-                type="button"
-                aria-label="DONE"
-                className={`tab ${isClickTab === 'DONE' && 'tab-checked'}`}
-                onClick={() => handleTabClick('DONE')}
-              >
-                已完成
-              </button>
+              <h2>
+                <button
+                  type="button"
+                  aria-label="DONE"
+                  className={`tab ${isClickTab === 'DONE' && 'tab-checked'}`}
+                  onClick={() => handleTabClick('DONE')}
+                >
+                  已完成
+                </button>
+              </h2>
             </TabItem>
           </TabList>
         </CardHeader>
@@ -191,8 +208,13 @@ function TodoListCard(props) {
             <span>{haveTodoLength}</span> 個待完成項目
           </button>
 
-          <ButtonClearTodo aria-label="CLEAR" onClick={handleClearTodo}>
-            清除已完成項目
+          <ButtonClearTodo
+            aria-label="CLEAR"
+            onClick={handleClearTodo}
+            disabled={!haveClearLength}
+            aria-disabled={!haveClearLength}
+          >
+            {haveClearLength ? '清除已完成項目' : '尚無項目可清除'}
           </ButtonClearTodo>
         </CardFooter>
       </Card>
