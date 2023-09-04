@@ -115,17 +115,19 @@ function TodoListCard(props) {
 
   useEffect(() => {
     setFilterData(
-      todoData.filter((item) => {
-        if (isClickTab === 'ALL') {
-          return true;
-        }
-        if (isClickTab === 'TODO') {
-          return !item.status;
-        }
-        if (isClickTab === 'DONE') {
-          return item.status;
-        }
-      }),
+      [...todoData]
+        .filter((item) => {
+          if (isClickTab === 'ALL') {
+            return true;
+          }
+          if (isClickTab === 'TODO') {
+            return !item.status;
+          }
+          if (isClickTab === 'DONE') {
+            return item.status;
+          }
+        })
+        .reverse(),
     );
 
     setHaveTodoLength(todoData.filter((item) => !item.status).length);
