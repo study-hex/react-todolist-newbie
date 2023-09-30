@@ -20,7 +20,7 @@
   position: relative;
   display: block;
   padding-left: 16px;
-  user-select: none;
+  -webkit-user-select: none;
   flex-grow: 1;
 }
 

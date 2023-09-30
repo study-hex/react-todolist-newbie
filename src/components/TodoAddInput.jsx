@@ -59,6 +59,15 @@ const ButtonAddTodo = styled.button`
 
 // end of styled
 
+/**
+ * Renders an input field and a button for adding a new todo item.
+ *
+ * @param {object} props - The properties passed to the component.
+ * @param {array} props.todoData - The array of existing todo items.
+ * @param {function} props.updateData - The function to update the todo data.
+ * @param {function} props.handleTabClick - The function to handle tab click.
+ * @return {JSX.Element} The rendered input field and button.
+ */
 function TodoAddInput(props) {
   const { todoData, updateData, handleTabClick } = props;
 

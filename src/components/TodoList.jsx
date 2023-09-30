@@ -56,6 +56,15 @@ const ButtonTodoContent = styled.button`
 
 // end of styled
 
+/**
+ * Renders a todo list based on the provided data and handles todo operations.
+ *
+ * @param {object} props - The props object containing todoData, filterData, and updateData.
+ * @param {array} props.todoData - The array of todo data.
+ * @param {array} props.filterData - The array of filter data.
+ * @param {function} props.updateData - The function to update the data.
+ * @return {JSX.Element} - The rendered todo list.
+ */
 function TodoList(props) {
   const { todoData, filterData, updateData } = props;
 

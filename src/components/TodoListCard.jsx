@@ -98,6 +98,16 @@ const EmptyGroup = styled.hgroup`
 
 // end of styled
 
+/**
+ * Renders a TodoListCard component.
+ *
+ * @param {object} props - The properties object.
+ * @param {array} props.todoData - The array of todo data.
+ * @param {function} props.updateData - The function to update the data.
+ * @param {string} props.isClickTab - The currently clicked tab.
+ * @param {function} props.handleTabClick - The function to handle tab click.
+ * @return {JSX.Element} The rendered TodoListCard.
+ */
 function TodoListCard(props) {
   const { todoData, updateData, isClickTab, handleTabClick } = props;
 

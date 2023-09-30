@@ -71,11 +71,21 @@ function App() {
   const [todoData, setTodoData] = useState([]);
   const [isClickTab, setIsClickTab] = useState('ALL');
 
+  /**
+   * Retrieve stored data from local storage.
+   *
+   * @return {Array} The stored data or an empty array if no data is found.
+   */
   const getStoredData = () => {
     const storedData = localStorage.getItem('todoData');
     return storedData ? JSON.parse(storedData) : [];
   };
 
+  /**
+   * Saves the provided data to the local storage.
+   *
+   * @param {Array} data - The data to be saved.
+   */
   const saveStoredData = (data) => {
     localStorage.setItem('todoData', JSON.stringify(data));
   };
