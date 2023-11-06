@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import initData from './data/data';
+import ImgLogo from './assets/logo.svg'
 
 import TodoAddInput from './components/TodoAddInput';
 import TodoListCard from './components/TodoListCard';
@@ -49,6 +50,18 @@ const Navbar = styled.nav`
   align-items: center;
   padding-top: 16px;
   padding-bottom: 16px;
+`;
+
+const NavLogo = styled.h1`
+  background-image: url(${ImgLogo});
+  background-repeat: no-repeat;
+
+  width: 311px;
+  height: 38.5px;
+
+  text-indent: 101%;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const Main = styled.main`
@@ -111,7 +124,7 @@ function App() {
         <Container>
           <Navbar>
             <a href="#" title="TODOLIST">
-              <h1 className="h1-logo">TODOLIST</h1>
+              <NavLogo>TODOLIST</NavLogo>
             </a>
 
             <button type="button" onClick={handleResetData} aria-label="RESET">

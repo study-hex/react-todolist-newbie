@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { commonPropTypes } from '../data/propTypes';
@@ -67,6 +67,24 @@ const TabList = styled.ul`
 
 const TabItem = styled.li`
   width: 33%;
+`;
+
+const TabButton = styled.button`
+  padding: 16px 32px 16px 30px;
+  width: 100%;
+
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #9f9a91;
+  transition: color 0.3s linear;
+
+  ${(props) =>
+    props.$isBorder &&
+    css`
+      color: #333333;
+      border-bottom: 2px solid #333333;
+    `}
 `;
 
 const ButtonClearTodo = styled.button`
@@ -154,38 +172,35 @@ function TodoListCard(props) {
           <TabList>
             <TabItem>
               <h2>
-                <button
-                  type="button"
+                <TabButton
                   aria-label="ALL"
-                  className={`tab ${isClickTab === 'ALL' && 'tab-checked'}`}
+                  $isBorder={isClickTab === 'ALL'}
                   onClick={() => handleTabClick('ALL')}
                 >
                   全部
-                </button>
+                </TabButton>
               </h2>
             </TabItem>
             <TabItem>
               <h2>
-                <button
-                  type="button"
+                <TabButton
                   aria-label="TODO"
-                  className={`tab ${isClickTab === 'TODO' && 'tab-checked'}`}
+                  $isBorder={isClickTab === 'TODO'}
                   onClick={() => handleTabClick('TODO')}
                 >
                   待完成
-                </button>
+                </TabButton>
               </h2>
             </TabItem>
             <TabItem>
               <h2>
-                <button
-                  type="button"
+                <TabButton
                   aria-label="DONE"
-                  className={`tab ${isClickTab === 'DONE' && 'tab-checked'}`}
+                  $isBorder={isClickTab === 'DONE'}
                   onClick={() => handleTabClick('DONE')}
                 >
                   已完成
-                </button>
+                </TabButton>
               </h2>
             </TabItem>
           </TabList>
