@@ -6,8 +6,6 @@ import initData from './data/data';
 import TodoAddInput from './components/TodoAddInput';
 import TodoListCard from './components/TodoListCard';
 
-import { ResetStyle, BaseStyle } from './components/globalStyle';
-
 import './styles/App.css';
 // import styles from './styles/App.css?inline';
 // import styles from './styles/App.css';
@@ -109,9 +107,6 @@ function App() {
 
   return (
     <>
-      <ResetStyle />
-      <BaseStyle />
-
       <Wrapper>
         <Container>
           <Navbar>
